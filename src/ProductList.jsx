@@ -237,22 +237,29 @@ function ProductList() {
     fontSize: '30px',
     textDecoration: 'none',
    }
+    const activeButton = (plant) => {
+        if( cartItems.find(item => item.name === plant.name)) {
+            return(<button className="product-button added-to-cart" disabled >Added to Cart</button>);
+        }else{
+            return(<button className="product-button" onClick={()=>handleAddToCart(plant)}>Add to Cart</button>);
+        }
+    };
    const handleCartClick = (e) => {
-    e.preventDefault();
-    setShowCart(true); // Set showCart to true when cart icon is clicked
-};
-const handlePlantsClick = (e) => {
-    e.preventDefault();
-    setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
-    setShowCart(false); // Hide the cart when navigating to About Us
-};
-const handleAddToCart = (product) => {
-    dispatch(addItem(product));
-    setAddedToCart((prevState) => ({
-       ...prevState,
-       [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
-     }));
-};
+        e.preventDefault();
+        setShowCart(true); // Set showCart to true when cart icon is clicked
+    };
+    const handlePlantsClick = (e) => {
+        e.preventDefault();
+        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
+        setShowCart(false); // Hide the cart when navigating to About Us
+    };
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product));
+        setAddedToCart((prevState) => ({
+        ...prevState,
+        [product.name]: true, // Set the product name as key and value as true to indicate it's added to cart
+        }));
+    };
 
 // Calculate total quantity of items in the cart
 const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -296,15 +303,7 @@ const totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0
                             <div className="product-price">{plant.cost}</div>
                             <div>{plant.description}</div>
                             {/*Similarly like the above plant.name show other details like description and cost*/}
-                            {addedToCart[plant.name] ? (
-                                    <button className="product-button added-to-cart" disabled>
-                                        Added to Cart
-                                    </button>
-                                ) : (
-                                    <button className="product-button" onClick={() => handleAddToCart(plant)}>
-                                        Add to Cart
-                                    </button>
-                            )}
+                            {activeButton(plant)}
                         </div>
                         ))}
                     </div>
